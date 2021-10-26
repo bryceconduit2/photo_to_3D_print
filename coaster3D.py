@@ -1,13 +1,12 @@
 from PIL import Image
 import PIL.ImageOps  
 import numpy as np
-from matplotlib import pyplot
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import Delaunay
 from stl import mesh
 import math
 
-
+#convolution for smoothing
 def convolve2d(a, conv_filter):
   submatrices = np.array([
          [a[:-2,:-2], a[:-2,1:-1], a[:-2,2:]],
@@ -16,6 +15,7 @@ def convolve2d(a, conv_filter):
   multiplied_subs = np.einsum('ij,ijkl->ijkl',conv_filter,submatrices)
   return np.sum(np.sum(multiplied_subs, axis = -3), axis = -3)
 
+#creates cylinder coaster shape
 def cylinder(height,radius):
   no_points = 500
   cyl_x_u = np.zeros((no_points))
@@ -34,6 +34,7 @@ def cylinder(height,radius):
   cyl_z_l[:] = 0.
   return(cyl_x_u,cyl_y_u,cyl_z_u,cyl_x_l,cyl_y_l,cyl_z_l)
 
+#converts from pixel colour to point height using formula
 def pixel_height(pix,im):
   maxx = im.size[0]
   maxy = im.size[1]
@@ -43,6 +44,7 @@ def pixel_height(pix,im):
       pixels[i,j] = 0.2989 * pix[i,j][0] + 0.5870 * pix[i,j][1] + 0.1140 * pix[i,j][2]
   return(pixels,maxx,maxy)
 
+#shifts stuff around on coaster surface
 def position(maxx,maxy, height,pixels,heightdivide,shiftx,shifty):
   x = np.zeros((maxx*maxy))
   y = np.zeros((maxx*maxy))
@@ -54,6 +56,7 @@ def position(maxx,maxy, height,pixels,heightdivide,shiftx,shifty):
       z[i*maxy+j] = (height - pixels[i,j]/heightdivide)
   return(x,y,z)
   
+#joins it all together into point cloud
 def append_to_point_cloud(x_stl,y_stl,z_stl,x,y,z):
   x_stl = np.append(x_stl,x)
   y_stl = np.append(y_stl,y)
@@ -117,6 +120,6 @@ if __name__ == "__main__":
       stl_mesh.vectors[i][j] = points3D[f[j],:]
 
   #save file
-  stl_mesh.save('nameoffile.stl')
+  stl_mesh.save('output.stl')
 
 
