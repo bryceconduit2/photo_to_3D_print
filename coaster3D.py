@@ -1,7 +1,6 @@
 from PIL import Image
 import PIL.ImageOps  
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import Delaunay
 from stl import mesh
 import math
