@@ -64,8 +64,8 @@ def append_to_point_cloud(x_stl,y_stl,z_stl,x,y,z):
 
 
 if __name__ == "__main__":
-  im = Image.open('example.jpg') # Can be many different formats.
-  text = Image.open('exampletext.jpg') # Can be many different formats.
+  im = Image.open('../input/example.jpg') # Can be many different formats.
+  text = Image.open('../input/exampletext.jpg') # Can be many different formats.
   #flip image to get black background
   im = PIL.ImageOps.invert(im)
   pix = im.load()
@@ -119,6 +119,6 @@ if __name__ == "__main__":
       stl_mesh.vectors[i][j] = points3D[f[j],:]
 
   #save file
-  stl_mesh.save('output.stl')
+  stl_mesh.save('../output/output.stl')
 
 
