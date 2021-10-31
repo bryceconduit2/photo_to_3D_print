@@ -17,21 +17,17 @@ def convolve2d(a, conv_filter):
 #creates cylinder coaster shape
 def cylinder(height,radius):
   no_points = 500
-  cyl_x_u = np.zeros((no_points))
-  cyl_y_u = np.zeros((no_points))
-  cyl_z_u = np.zeros((no_points))
-  cyl_x_l = np.zeros((no_points))
-  cyl_y_l = np.zeros((no_points))
-  cyl_z_l = np.zeros((no_points))
+  cyl_u = np.zeros((no_points,3))
+  cyl_l = np.zeros((no_points,3))
   theta = np.linspace(0.,2.*math.pi,no_points)
   for i,t in enumerate(theta):
-    cyl_x_u[i] = radius* math.cos(t)
-    cyl_y_u[i] = radius*math.sin(t)
-    cyl_x_l[i] = (radius+0.5)*math.cos(t)
-    cyl_y_l[i] = (radius+0.5)*math.sin(t)
-  cyl_z_u[:] = height
-  cyl_z_l[:] = 0.
-  return(cyl_x_u,cyl_y_u,cyl_z_u,cyl_x_l,cyl_y_l,cyl_z_l)
+    cyl_u[i,0] = radius* math.cos(t)
+    cyl_u[i,1] = radius*math.sin(t)
+    cyl_l[i,0] = (radius+0.5)*math.cos(t)
+    cyl_l[i,1] = (radius+0.5)*math.sin(t)
+  cyl_u[:,2] = height
+  cyl_l[:,2] = 0.
+  return(cyl_u,cyl_l)
 
 #converts from pixel colour to point height using formula
 def pixel_height(pix,im):
@@ -45,22 +41,18 @@ def pixel_height(pix,im):
 
 #shifts stuff around on coaster surface
 def position(maxx,maxy, height,pixels,heightdivide,shiftx,shifty):
-  x = np.zeros((maxx*maxy))
-  y = np.zeros((maxx*maxy))
-  z = np.zeros((maxx*maxy))
+  position_ = np.zeros((maxx*maxy,3))
   for i in range(0,maxx-2):
     for j in range(0,maxy-2):
-      x[i*maxy+j] = (i - maxx*0.5+shiftx)
-      y[i*maxy+j] = (j- maxy*0.5+shifty)
-      z[i*maxy+j] = (height - pixels[i,j]/heightdivide)
-  return(x,y,z)
+      position_[i*maxy+j,0] = (i - maxx*0.5+shiftx)
+      position_[i*maxy+j,1] = (j- maxy*0.5+shifty)
+      position_[i*maxy+j,2] = (height - pixels[i,j]/heightdivide)
+  return(position_)
   
 #joins it all together into point cloud
-def append_to_point_cloud(x_stl,y_stl,z_stl,x,y,z):
-  x_stl = np.append(x_stl,x)
-  y_stl = np.append(y_stl,y)
-  z_stl = np.append(z_stl,z)
-  return(x_stl,y_stl,z_stl)
+def append_to_point_cloud(points3D,points3D_):
+  points3D = np.append(points3D,points3D_,axis=0)
+  return(points3D)
 
 
 if __name__ == "__main__":
@@ -82,7 +74,7 @@ if __name__ == "__main__":
   radius = 105.
 
   #create cylinder for plot
-  cyl_x_u,cyl_y_u,cyl_z_u,cyl_x_l,cyl_y_l,cyl_z_l = cylinder(height,radius)
+  cyl_u,cyl_l = cylinder(height,radius)
 
   #convolution filter for smoothing
   conv_filter = np.array([[1,1,1],[1,1,1],[1,1,1]])
@@ -91,27 +83,25 @@ if __name__ == "__main__":
   print(len(pixels))
   
   #position picture
-  x,y,z=position(maxx,maxy, height,pixels,300,10,0)
+  new_position=position(maxx,maxy, height,pixels,300,10,0)
 
-  x_stl = np.empty((0))
-  y_stl = np.empty((0))
-  z_stl = np.empty((0))
+  points3D = np.empty((0,3))
+
   #combine 3d piccy into big point cloud
-  x_stl,y_stl,z_stl = append_to_point_cloud(x_stl,y_stl,z_stl,x,y,z)
-  x_stl,y_stl,z_stl = append_to_point_cloud(x_stl,y_stl,z_stl,cyl_x_u,cyl_y_u,cyl_z_u)
-  x_stl,y_stl,z_stl = append_to_point_cloud(x_stl,y_stl,z_stl,cyl_x_l,cyl_y_l,cyl_z_l)
+  points3D = append_to_point_cloud(points3D,new_position)
+  points3D = append_to_point_cloud(points3D,cyl_u)
+  points3D = append_to_point_cloud(points3D,cyl_l)
   
   #position text
-  textx,texty,textz=position(maxxtext,maxytext, height,pixelstext,700,-60,0)
+  text_position=position(maxxtext,maxytext, height,pixelstext,700,-60,0)
 
   #combine 3d text into big point cloud
-  x_stl,y_stl,z_stl = append_to_point_cloud(x_stl,y_stl,z_stl,textx,texty,textz)
+  points3D = append_to_point_cloud(points3D,text_position)
 
   #define 2D points, as input data for the Delaunay triangulation of U
-  points2D=np.vstack([x_stl,y_stl]).T
+  points2D=points3D[:,0:2]
   tri = Delaunay(points2D)#triangulate the rectangle U
-  #define 3D points
-  points3D=np.vstack([x_stl,y_stl,z_stl]).T
+
   # Create the mesh
   stl_mesh = mesh.Mesh(np.zeros(len(tri.simplices), dtype=mesh.Mesh.dtype))
   for i, f in enumerate(tri.simplices):
