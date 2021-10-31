@@ -32,7 +32,7 @@ def pixel_height(pix,im):
   pixels = np.zeros((maxx,maxy))
   for i in range(maxx):
     for j in range(maxy):
-      pixels[i,j] = 0.2989 * pix[i,j][0] + 0.5870 * pix[i,j][1] + 0.1140 * pix[i,j][2]
+      pixels[i,j] = 0.3 * pix[i,j][0] + 0.6 * pix[i,j][1] + 0.1 * pix[i,j][2]
   return(pixels,maxx,maxy)
 
 #shifts stuff around on coaster surface
