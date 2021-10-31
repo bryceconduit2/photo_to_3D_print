@@ -3,7 +3,19 @@ This script (coaster3d.py) takes in "example.jpg" and "exampletitle.jpg" and cre
 
 ![Alt text](/output/outputstl.jpg?raw=true "Title")
 
-
-To install required python libraries:
+Installation:
+1) Create conda/miniconda environment and activate
+conda create --name 3d 
+conda activate 3d 
+2) Install python
+conda install -c anaconda python=3.8
+3) Clone/download github repositrary into desired folder.
+git clone https://github.com/bryceconduit2/photo_to_3D_print.git
+4) cd into directory
+cd photo_to_3D_print
+5) Install required python libraries:
 pip install -r requirements.txt
-
+6) Enter src directory
+cd src
+7) Run python script
+python 
