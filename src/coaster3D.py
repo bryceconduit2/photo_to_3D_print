@@ -15,19 +15,15 @@ def convolve2d(a, conv_filter):
   return np.sum(np.sum(multiplied_subs, axis = -3), axis = -3)
 
 #creates cylinder coaster shape
-def cylinder(height,radius):
+def circle(height,radius):
   no_points = 500
-  cyl_u = np.zeros((no_points,3))
-  cyl_l = np.zeros((no_points,3))
+  circle_ = np.zeros((no_points,3))
   theta = np.linspace(0.,2.*math.pi,no_points)
   for i,t in enumerate(theta):
-    cyl_u[i,0] = radius* math.cos(t)
-    cyl_u[i,1] = radius*math.sin(t)
-    cyl_l[i,0] = (radius+0.5)*math.cos(t)
-    cyl_l[i,1] = (radius+0.5)*math.sin(t)
-  cyl_u[:,2] = height
-  cyl_l[:,2] = 0.
-  return(cyl_u,cyl_l)
+    circle_[i,0] = radius* math.cos(t)
+    circle_[i,1] = radius*math.sin(t)
+  circle_[:,2] = height
+  return(circle_)
 
 #converts from pixel colour to point height using formula
 def pixel_height(pix,im):
@@ -74,7 +70,8 @@ if __name__ == "__main__":
   radius = 105.
 
   #create cylinder for plot
-  cyl_u,cyl_l = cylinder(height,radius)
+  cyl_u = circle(height,radius)
+  cyl_l = circle(0,radius+0.5)
 
   #convolution filter for smoothing
   conv_filter = np.array([[1,1,1],[1,1,1],[1,1,1]])
