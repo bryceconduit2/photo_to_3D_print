@@ -15,7 +15,9 @@ git clone https://github.com/bryceconduit2/photo_to_3D_print.git
 cd photo_to_3D_print
 5) Install required python libraries:
 pip install -r requirements.txt
+Note if problems are encountered here: - pip install pipreqs; pipreqs --force and repeat. You may need to install numpy-stl via pip install numpy-stl
 6) Enter src directory
 cd src
 7) Run python script
 python coaster3D.py
+Note if "from stl import mesh" error encountered here do pip install numpy-stl.
