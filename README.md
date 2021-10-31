@@ -18,4 +18,4 @@ pip install -r requirements.txt
 6) Enter src directory
 cd src
 7) Run python script
-python 
+python coaster3D.py
