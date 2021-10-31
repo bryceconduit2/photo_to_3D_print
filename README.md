@@ -5,7 +5,7 @@ This script (coaster3d.py) takes in "example.jpg" and "exampletitle.jpg" and cre
 
 Prerequisities: \
 Open anaconda prompt. Anaconda/miniconda available from https://www.anaconda.com/.  \
-Installation:\
+Installation:
 1) Create conda/miniconda environment and activate:\
 conda create --name 3d \
 conda activate 3d \
