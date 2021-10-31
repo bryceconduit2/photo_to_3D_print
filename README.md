@@ -3,7 +3,7 @@ This script (coaster3d.py) takes in "example.jpg" and "exampletitle.jpg" and cre
 
 ![Alt text](/output/outputstl.jpg?raw=true "Title")
 
-Prerequisities:
+Prerequisities: \
 Open anaconda prompt. Anaconda/miniconda available from https://www.anaconda.com/.
 Installation:
 1) Create conda/miniconda environment and activate:
