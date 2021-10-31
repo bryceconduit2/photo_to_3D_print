@@ -1,5 +1,5 @@
 "# photo_to_3D_print" 
-This script (coaster3d.py) takes in "example.jpg" and "exampletitle.jpg" and creates a *.stl coaster suitable for 3D printing by applying a pixel height formula to the two input image files. It applies a convolution to create a smooth surface. Uses delaunay triangulation to create the mesh. I use Repetier(https://www.repetier.com/)  to print this which can handle the limitations of the delaunay triangulation.
+This script (coaster3d.py) takes in "example.jpg" and "exampletitle.jpg" and creates a *.stl coaster suitable for 3D printing by applying a pixel height formula to the two input image files. It applies a convolution to create a smooth surface. Uses delaunay triangulation to create the mesh. I use Repetier (https://www.repetier.com/)  to print this which can handle the limitations of the delaunay triangulation.
 
 ![Alt text](/output/outputstl.jpg?raw=true "Title")
 
